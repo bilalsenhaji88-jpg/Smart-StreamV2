@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -27,6 +26,26 @@
             </div>
             <button id="back-btn" class="hidden mb-3 text-sm text-blue-400">← Retour aux pays</button>
 
+
+            <div class="flex gap-2 mb-4">
+                <button id="all-btn" class="flex-1 text-xs py-2 rounded bg-blue-600">Toutes</button>
+                <button id="favorites-btn" class="flex-1 text-xs py-2 rounded bg-[#1f2937]">★ Favoris</button>
+                <button id="blacklist-btn" class="flex-1 text-xs py-2 rounded bg-[#1f2937]">🚫 Liste noire</button>
+            </div>
+
+            <button id="add-btn" class="w-full mb-3 text-xs py-2 rounded bg-[#1f2937] hover:bg-blue-600">
+                + Ajouter une chaîne
+            </button>
+
+            <div id="add-form-container" class="hidden mb-4 p-3 rounded-lg bg-[#1f2937] flex flex-col gap-2">
+                <input id="input-number" type="text" placeholder="Numéro" class="w-full bg-[#050914] rounded-lg py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                <input id="input-name" type="text" placeholder="Nom" class="w-full bg-[#050914] rounded-lg py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                <input id="input-category" type="text" placeholder="Catégorie / Pays" class="w-full bg-[#050914] rounded-lg py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                <input id="input-logo" type="text" placeholder="URL du logo" class="w-full bg-[#050914] rounded-lg py-2 px-3 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                <p id="add-error" class="hidden text-xs text-red-400"></p>
+                <button id="submit-add" class="py-2 rounded bg-blue-600 text-sm">Ajouter</button>
+            </div>
+
             <h2 class="text-xs font-semibold tracking-wider text-gray-400 mb-4">
                 DOCUMENTAIRE
             </h2>
@@ -35,24 +54,24 @@
 
             </div>
 
-            
+
         </aside>
 
         <main class="flex-1 p-4 md:p-6">
 
             <section id="preview-container" class="relative aspect-video bg-[#1f2937] rounded-xl flex items-center justify-center">
 
-               
+
 
                 <span class="text-gray-400 text-sm">
 
                     TV
-                
+
                 </span>
 
             </section>
 
-            
+
 
         </main>
 

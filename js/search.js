@@ -1,4 +1,3 @@
-
 export function filtrerChannels(channels, search) {
 
     return channels.filter(channel => {

@@ -1,18 +1,15 @@
-
 import { state } from "./states.js";
+import { updateChannel } from "./api.js";
 
 export function affichage(channels, container) {
+
   
+  const visibleChannels = channels.filter(channel => !channel.isBlacklisted);
 
-  if (!state.favorites) state.favorites = [];
-  if (!state.blacklist) state.blacklist = [];
-
-  container.innerHTML = channels.map(channel => {
+  container.innerHTML = visibleChannels.map(channel => {
 
     const id = String(channel.id);
-
-    const isFav = state.favorites.includes(id);
-    const isBlocked = state.blacklist.includes(id);
+    const isFav = Boolean(channel.isFavorite);
 
     return `
       <button data-id="${id}"
@@ -37,55 +34,62 @@ export function affichage(channels, container) {
           ${isFav ? "★" : "☆"}
         </span>
 
-        <!-- BLACKLIST -->
+   
         <span data-bloc="${id}"
-          class="bloc cursor-pointer text-2xl
-          ${isBlocked ? "text-red-500" : "text-gray-400"}">
-          ${isBlocked ? "🚫" : "⊘"}
+          class="bloc cursor-pointer text-2xl text-gray-400">
+          🚫
         </span>
 
       </button>
     `;
   }).join("");
 
-  // FAVORITES
+  
   container.querySelectorAll(".fav").forEach(star => {
 
-    star.addEventListener("click", (e) => {
+    star.addEventListener("click", async (e) => {
       e.stopPropagation();
 
       const id = star.dataset.fav;
+      const channel = channels.find(c => String(c.id) === id);
+      if (!channel) return;
 
-      if (state.favorites.includes(id)) {
-        state.favorites = state.favorites.filter(
-          favId => favId !== id
-        );
-      } else {
-        state.favorites.push(id);
-      }
-
+      const previous = channel.isFavorite;
+      channel.isFavorite = !previous;
       affichage(channels, container);
+
+      try {
+        await updateChannel(channels, id, { isFavorite: channel.isFavorite });
+      } catch (error) {
+    
+      
+      
+        console.error("Erreur : le favori n'a pas pu être enregistré.",error)
+      }
     });
 
   });
 
-  // BLACKLIST
+  
   container.querySelectorAll(".bloc").forEach(button => {
 
-    button.addEventListener("click", (e) => {
+    button.addEventListener("click", async (e) => {
       e.stopPropagation();
 
       const id = button.dataset.bloc;
+      const channel = channels.find(c => String(c.id) === id);
+      if (!channel) return;
 
-      if (state.blacklist.includes(id)) {
-        state.blacklist = state.blacklist.filter(
-          blockedId => blockedId !== id
-        );
-      } else {
-        state.blacklist.push(id);
+      channel.isBlacklisted = true;
+      affichage(channels, container); 
+
+      try {
+        await updateChannel(channels, id, { isBlacklisted: true });
+      } catch (error) {
+        channel.isBlacklisted = false;
+        affichage(channels, container);
+      console.log("Erreur : impossible de masquer cette chaîne.",error);
       }
-
-      affichage(channels, container);
     });
 
   });
